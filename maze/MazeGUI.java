@@ -39,6 +39,7 @@ public class MazeGUI extends JFrame{
 	int step;	//ステップ数
 	int move;	//0:一時停止中 1:再生中
 	String searchName = "";
+	int fastestStep = -1;	//最短ステップ
 
 
 	//コンストラクタ
@@ -131,7 +132,12 @@ public class MazeGUI extends JFrame{
 			g.drawString(step + "ステップ", 10, 20);
 
 			//探索名の描画
-			g.drawString(searchName, SIZEPNX/2, 20);
+			g.drawString(searchName, SIZEPNX/3 * 2, 20);
+
+			//最短ステップの描画
+			if(fastestStep != -1){
+				g.drawString("最短：" + fastestStep, SIZEPNX/3, 20);
+			}
 
 		}
 	}
@@ -144,6 +150,7 @@ public class MazeGUI extends JFrame{
 			if(ae.getSource() == resetBtn){
 				mdata.setMaze();
 				step = 0;
+				fastestStep = -1;
 				searchName = "";
 				repaint();
 
@@ -263,7 +270,7 @@ public class MazeGUI extends JFrame{
 				repaint();
 				if(isGoal){
 					timer.stop();
-					mb.fastestRoute();	//最短ルートを表示
+					fastestStep = mb.fastestRoute();	//最短ルートを表示
 					repaint();
 					resetBtn.setEnabled(true);
 					stopBtn.setEnabled(false);

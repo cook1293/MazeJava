@@ -81,9 +81,10 @@ public class MazeBreadth {
 	}
 
 	//最短経路を表示
-	public void fastestRoute(){
+	public int fastestRoute(){
 		int bestX, bestY;
 		int pastX, pastY;
+		int fastestStep = 0;	//最短ステップ
 
 		bestX = nowX;
 		bestY = nowY;
@@ -93,7 +94,10 @@ public class MazeBreadth {
 			bestX = historyX[pastY][pastX];
 			bestY = historyY[pastY][pastX];
 			mdata.maze[bestY][bestX] = 3;
+			fastestStep++;
 		}
+
+		return fastestStep;
 	}
 
 }
