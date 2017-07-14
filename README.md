@@ -1,7 +1,7 @@
 # MazeJava
 
 ## 概要
-様々な迷路の探索を行うJavaアプリケーション。
+様々な迷路の探索を行うJavaアプリケーション。強化学習（Q学習）による探索も実装。
 
 ## 開発環境・言語
 Eclipse 4.6 (Neon)，Java
@@ -11,10 +11,11 @@ Eclipse 4.6 (Neon)，Java
 |:-|:-|:-|
 |1.0|2017/07/10|初版。|
 |1.1|2017/07/11|幅優先探索で最短ステップの表示機能を追加。|
+|2.0|2017/07/14|強化学習（Q学習）による探索を追加。|
 
 ## ファイル構成
 #### ソースファイル
-Mazeフォルダ内
+mazeフォルダ内
 - MainMain.java：迷路実行のメインクラス。
 - MazeBasic.java：迷路の基本データを読み込むクラス。
 - MazeGUI.java：迷路の画面描画処理を行うクラス。
@@ -22,8 +23,14 @@ Mazeフォルダ内
 - MazeBreadth.java：幅優先探索を行うクラス。
 - MazeRandom.java：ランダムに探索を行うクラス。
 
+mazeQlearningフォルダ内
+- MazeQMain.java：強化学習（Q学習）による迷路探索実行のメインクラス。
+- MazeQGUI.java：強化学習による迷路探索描画処理を行うクラス。
+- MazeQlearning.java：強化学習による迷路探索を行うクラス。
+
 #### 実行ファイル
-- MazeMain.java
+- MazeMain.java：迷路の実行ファイル。
+- MazeQMain.java：強化学習による迷路探索の実行ファイル。
 
 #### CSVファイル
 - InitialMaze.csv：迷路の基本データのサンプルファイル。
@@ -47,4 +54,10 @@ File f = new File("./src/maze/initialMaze.csv");
 ``` java
 public final int ROWS = 10;
 public final int COLUMNS = 16;
+```
+
+迷路を変更した時にMazeQMainを実行する場合は、**MazeBasic.java**の最短ステップ数も変更する。最短ステップ数は、ゴールまでの最短経路を通った時にかかるステップ数のこと。計算しなくても、上記MainMazeの幅優先探索を実行することで求められる。
+
+``` java
+public int firstestSteps = 38; //最短ステップ
 ```
