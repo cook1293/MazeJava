@@ -50,14 +50,14 @@ mazeQlearningフォルダ内
 File f = new File("./src/maze/initialMaze.csv");
 ```
 
-迷路の大きさを変更した場合は、**MazeBasic.java**の定数宣言部分も変更する。
+迷路の大きさを変更した場合は、**MazeBasic.java**、**MazeGUI.java**（MazeQMain実行時は**MazeQGUI.java**）の定数宣言部分も変更する。
 
 ``` java
 public final int ROWS = 10;
 public final int COLUMNS = 16;
 ```
 
-迷路を変更した時にMazeQMainを実行する場合は、**MazeBasic.java**の最短ステップ数も変更する。最短ステップ数は、ゴールまでの最短経路を通った時にかかるステップ数のこと。計算しなくても、上記MainMazeの幅優先探索を実行することで求められる。
+MazeQMainを実行する場合は、**MazeBasic.java**の最短ステップ数も変更する。最短ステップ数は、ゴールまでの最短経路を通った時にかかるステップ数のこと。計算しなくても、上記MainMazeの幅優先探索を実行することで求められる。
 
 ``` java
 public int firstestSteps = 38; //最短ステップ
