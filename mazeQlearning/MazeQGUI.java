@@ -92,7 +92,7 @@ public class MazeQGUI extends JFrame{
 		this.mdata = mdata;
 
 		//Q学習 (迷路データ, 学習回数, 割引率, 学習率, ε)
-		mq = new MazeQlearning(mdata, 100000, 0.9, 0.1, 0.3);
+		mq = new MazeQlearning(mdata, 100000, 0.8, 0.2, 0.3);
 
 		sa = new SearchAction();
 
@@ -160,6 +160,7 @@ public class MazeQGUI extends JFrame{
 				stopBtn.setText("一時停止");
 				stopBtn.setEnabled(false);
 				qlearnBtn.setEnabled(true);
+				testMoveBtn.setEnabled(false);
 				outputQBtn.setEnabled(false);
 			}
 
