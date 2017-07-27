@@ -23,7 +23,7 @@ public class MazeGUI extends JFrame{
 	public static final int COLUMNS = 16;
 	public static final int SIZEPNX = SIZECELL * COLUMNS;
 	public static final int SIZEPNY = SIZECELL * ROWS;
-	public static final int SIZEWINX = SIZEPNX + 30;
+	public static int SIZEWINX = SIZEPNX + 30;
 	public static final int SIZEWINY = SIZEPNY + 130;
 
 	//GUI部品
@@ -36,14 +36,19 @@ public class MazeGUI extends JFrame{
 	//迷路のオブジェクト
 	MazeBasic mdata;
 
-	int step;	//ステップ数
-	int move;	//0:一時停止中 1:再生中
+	int step = 0;	//ステップ数
+	int move = 0;	//0:一時停止中 1:再生中
 	String searchName = "";
 	int fastestStep = -1;	//最短ステップ
 
 
 	//コンストラクタ
 	public MazeGUI(String title, MazeBasic mdata, int callTime){
+		//ウィンドウサイズの調整
+		if(SIZEWINX < 500){
+			SIZEWINX = 500;
+		}
+
 		//フレームの準備
 		setSize(SIZEWINX, SIZEWINY);
 		setTitle(title);
@@ -89,8 +94,6 @@ public class MazeGUI extends JFrame{
 
 		//タイマーの呼び出し間隔
 		timer = new Timer(callTime, sa);
-
-		step = 0;
 	}
 
 
