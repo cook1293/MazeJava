@@ -10,6 +10,8 @@ import maze.MazeBasic;
  */
 
 public class MazeQlearning {
+	public static final int MAXSTEPS = 10000;
+	public static final int MAXLEARN = 500000;
 
 	Random rand = new Random();
 	MazeBasic mdata;
@@ -43,11 +45,10 @@ public class MazeQlearning {
 
 
 	//コンストラクタ
-	MazeQlearning(MazeBasic mdata, int lm, double gr, double lr, double er){
+	MazeQlearning(MazeBasic mdata, double gr, double lr, double er){
 		this.mdata = mdata;
 
 		q = new double[mdata.ROWS][mdata.COLUMNS][4];
-		this.learningMax = lm;
 		this.gammaRate = gr;
 		this.learningRate = lr;
 		this.epsilonRate = er;
@@ -76,11 +77,17 @@ public class MazeQlearning {
 	}
 
 	//Q学習
-	int qlearn(){
+	int qlearn(int lm){
 		//現在位置の設定
 		resetMaze();
 
 		learningCnt = 0;
+		//学習モードによって最大学習回数が異なる
+		if(lm == -1){
+			learningMax = MAXLEARN;		//最短ステップになるまで学習→大変大きい数
+		} else {
+			learningMax = lm;			//回数指定時はその回数分
+		}
 
 		int dir;
 		int nextX, nextY;
@@ -124,18 +131,17 @@ public class MazeQlearning {
 				nowX = mdata.startX;
 				nowY = mdata.startY;
 
-				//最短ステップで解けていたら終了
-				step = 0;
-				while(step < mdata.fastestStep){
-					isGoal = moveTest();
-					step++;
+				if(lm == -1){	//最短ステップになるまで学習時
+					//最短ステップで解けていたら終了
+					step = 0;
+					while(step < mdata.fastestStep){
+						isGoal = moveTest();
+						step++;
+					}
+					if(isGoal)	break;
 				}
-				if(isGoal){
-					System.out.println("学習回数：" + learningCnt);
-					break;
-				} else {	//最短で解けていなければ、迷路を初期化して更に学習
-					resetMaze();
-				}
+				//迷路を初期化して再学習
+				resetMaze();
 			}
 		}
 		resetMaze();
@@ -213,6 +219,28 @@ public class MazeQlearning {
 		}
 	}
 
+	//学習結果の出力
+	void outputResult(int generation){
+		int step = 0;
+		boolean isGoal;
+
+		resetMaze();
+		//移動のテスト
+		while(step < MAXSTEPS){
+			isGoal = moveTest();
+			step++;
+			if(isGoal)	break;
+		}
+		resetMaze();
+
+		//一定回数以上は未ゴールと判断
+		System.out.println(generation + "回学習後");
+		if(step < MAXSTEPS){
+			System.out.println("ステップ：" + step);
+		} else {
+			System.out.println("未ゴール");
+		}
+	}
 
 	//Q学習後のテスト
 	boolean moveTest(){
@@ -220,6 +248,7 @@ public class MazeQlearning {
 		if(moveCheck(nowX, nowY, dir)){
 			move(dir);
 		}
+
 		//ゴールしたかどうか
 		if(nowX == mdata.goalX && nowY == mdata.goalY){
 			return true;

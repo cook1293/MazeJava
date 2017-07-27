@@ -7,8 +7,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.Timer;
 
 import maze.MazeBasic;
@@ -31,6 +34,10 @@ public class MazeQGUI extends JFrame{
 	//GUI部品
 	MazePanel pn = new MazePanel();
 	JButton resetBtn, stopBtn, qlearnBtn, testMoveBtn, outputQBtn;
+	JLabel learnLb;
+	JTextField learnFld;
+	JCheckBox modeCheck;
+
 
 	SearchAction sa;
 	Timer timer;
@@ -41,9 +48,9 @@ public class MazeQGUI extends JFrame{
 	MazeQlearning mq;
 
 
-	int step;	//ステップ数
-	int move;	//0:一時停止中 1:再生中
-	int learningCnt = 0;	//学習回数
+	int step = 0;	//ステップ数
+	int move = 0;	//0:一時停止中 1:再生中
+	int learningSum = 0;	//総学習回数
 
 	//コンストラクタ
 	public MazeQGUI(String title, MazeBasic mdata, int callTime){
@@ -58,7 +65,7 @@ public class MazeQGUI extends JFrame{
 
 		MyActionListener als = new MyActionListener();
 
-		//ボタン
+		//部品
 		resetBtn = new JButton("リセット");
 		resetBtn.addActionListener(als);
 		resetBtn.setBounds(10, SIZEPNY + 10, 90, 30);
@@ -79,27 +86,35 @@ public class MazeQGUI extends JFrame{
 		testMoveBtn.addActionListener(als);
 		testMoveBtn.setBounds(100, SIZEPNY + 40, 90, 30);
 		add(testMoveBtn);
-		testMoveBtn.setEnabled(false);
 
 		outputQBtn = new JButton("Q値出力");
 		outputQBtn.addActionListener(als);
-		outputQBtn.setBounds(190, SIZEPNY + 10, 120, 30);
+		outputQBtn.setBounds(190, SIZEPNY + 40, 120, 30);
 		add(outputQBtn);
-		outputQBtn.setEnabled(false);
+
+		learnLb = new JLabel("回数：");
+		learnLb.setBounds(200, SIZEPNY + 10, 50, 30);
+		add(learnLb);
+
+		learnFld = new JTextField("1000");
+		learnFld.setBounds(250, SIZEPNY + 10, 60, 30);
+		add(learnFld);
+
+		modeCheck = new JCheckBox("最短まで学習");
+		modeCheck.setBounds(320, SIZEPNY + 10, 120, 30);
+		add(modeCheck);
 
 
 		//迷路データ
 		this.mdata = mdata;
 
 		//Q学習 (迷路データ, 学習回数, 割引率, 学習率, ε)
-		mq = new MazeQlearning(mdata, 100000, 0.8, 0.2, 0.3);
+		mq = new MazeQlearning(mdata, 0.8, 0.2, 0.3);
 
 		sa = new SearchAction();
 
 		//タイマーの呼び出し間隔
 		timer = new Timer(callTime, sa);
-
-		step = 0;
 	}
 
 
@@ -141,7 +156,7 @@ public class MazeQGUI extends JFrame{
 			g.drawString(step + "ステップ", 10, 20);
 
 			//学習回数の描画
-			g.drawString("学習回数：" + learningCnt, SIZEPNX/2, 20);
+			g.drawString("学習回数：" + learningSum, SIZEPNX/2, 20);
 		}
 	}
 
@@ -154,54 +169,71 @@ public class MazeQGUI extends JFrame{
 				mdata.setMaze();
 				mq.initializeQ();
 				step = 0;
-				learningCnt = 0;
+				learningSum = 0;
 				repaint();
 
 				stopBtn.setText("一時停止");
 				stopBtn.setEnabled(false);
 				qlearnBtn.setEnabled(true);
-				testMoveBtn.setEnabled(false);
-				outputQBtn.setEnabled(false);
 			}
 
 			//ストップ
 			if(ae.getSource() == stopBtn){
-				if(move == 1){
+				if(move == 1){	//再生→一時停止
+					timer.stop();
 					move = 0;
 					resetBtn.setEnabled(true);
+					if(!modeCheck.isSelected()) qlearnBtn.setEnabled(true);
 					stopBtn.setText("再生");
-					timer.stop();
-				} else {
-					move = 1;
+
+				} else {		//一時停止→再生
 					resetBtn.setEnabled(false);
+					qlearnBtn.setEnabled(false);
 					stopBtn.setText("一時停止");
+					move = 1;
 					timer.start();
 				}
 			}
 
 			//Q学習
 			if(ae.getSource() == qlearnBtn){
-				learningCnt = mq.qlearn();
+				//学習モードの決定(true:指定回数分だけ, false:最短ステップになるまで)
+				if(modeCheck.isSelected()){
+					learningSum = mq.qlearn(-1);
+					qlearnBtn.setEnabled(false);
+				} else {
+					learningSum += Integer.parseInt(learnFld.getText());
+					mq.qlearn(Integer.parseInt(learnFld.getText()));
+				}
+				mq.outputResult(learningSum);
+
+				step = 0;
 				repaint();
 
-				qlearnBtn.setEnabled(false);
+				stopBtn.setEnabled(false);
+				stopBtn.setText("一時停止");
 				testMoveBtn.setEnabled(true);
-				outputQBtn.setEnabled(true);
 			}
 
 			//Q学習後のテスト
 			if(ae.getSource() == testMoveBtn){
-				move = 1;
-				timer.start();
+				mq.resetMaze();
+				step = 0;
+
 				resetBtn.setEnabled(false);
 				stopBtn.setEnabled(true);
+				qlearnBtn.setEnabled(false);
 				testMoveBtn.setEnabled(false);
+
+				move = 1;
+				timer.start();
 			}
 
 			//Q値の出力
 			if(ae.getSource() == outputQBtn){
 				mq.outputQ();
 			}
+
 		}
 	}
 
@@ -220,6 +252,8 @@ public class MazeQGUI extends JFrame{
 				timer.stop();
 				resetBtn.setEnabled(true);
 				stopBtn.setEnabled(false);
+				if(!modeCheck.isSelected()) qlearnBtn.setEnabled(true);
+				testMoveBtn.setEnabled(true);
 			}
 		}
 	}
