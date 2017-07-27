@@ -24,12 +24,12 @@ import maze.MazeBasic;
 
 public class MazeQGUI extends JFrame{
 	public static final int SIZECELL = 30;
-	public static final int ROWS = 10;
-	public static final int COLUMNS = 16;
-	public static final int SIZEPNX = SIZECELL * COLUMNS;
-	public static final int SIZEPNY = SIZECELL * ROWS;
-	public static int SIZEWINX = SIZEPNX + 30;
-	public static final int SIZEWINY = SIZEPNY + 130;
+	public static int rows;
+	public static int columns;
+	public static int sizePnX;
+	public static int sizePnY;
+	public static int sizeWinX;
+	public static int sizeWinY;
 
 	//GUI部品
 	MazePanel pn = new MazePanel();
@@ -54,18 +54,26 @@ public class MazeQGUI extends JFrame{
 
 	//コンストラクタ
 	public MazeQGUI(String title, MazeBasic mdata, int callTime){
+
+		rows = mdata.rows;
+		columns = mdata.columns;
+		sizePnX = SIZECELL * columns;
+		sizePnY = SIZECELL * rows;
+		sizeWinX = sizePnX + 30;
+		sizeWinY = sizePnY + 130;
+
 		//ウィンドウサイズの調整
-		if(SIZEWINX < 500){
-			SIZEWINX = 500;
+		if(sizeWinX < 500){
+			sizeWinX = 500;
 		}
 
 		//フレームの準備
-		setSize(SIZEWINX, SIZEWINY);
+		setSize(sizeWinX, sizeWinY);
 		setTitle(title);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		setLayout(null);
-		pn.setBounds(0, 0, SIZEPNX, SIZEPNY);
+		pn.setBounds(0, 0, sizePnX, sizePnY);
 		add(pn);
 
 		MyActionListener als = new MyActionListener();
@@ -73,40 +81,40 @@ public class MazeQGUI extends JFrame{
 		//部品
 		resetBtn = new JButton("リセット");
 		resetBtn.addActionListener(als);
-		resetBtn.setBounds(10, SIZEPNY + 10, 90, 30);
+		resetBtn.setBounds(10, sizePnY + 10, 90, 30);
 		add(resetBtn);
 
 		stopBtn = new JButton("一時停止");
 		stopBtn.addActionListener(als);
-		stopBtn.setBounds(10, SIZEPNY + 40, 90, 30);
+		stopBtn.setBounds(10, sizePnY + 40, 90, 30);
 		add(stopBtn);
 		stopBtn.setEnabled(false);
 
 		qlearnBtn = new JButton("Q学習");
 		qlearnBtn.addActionListener(als);
-		qlearnBtn.setBounds(100, SIZEPNY + 10, 90, 30);
+		qlearnBtn.setBounds(100, sizePnY + 10, 90, 30);
 		add(qlearnBtn);
 
 		testMoveBtn = new JButton("テスト");
 		testMoveBtn.addActionListener(als);
-		testMoveBtn.setBounds(100, SIZEPNY + 40, 90, 30);
+		testMoveBtn.setBounds(100, sizePnY + 40, 90, 30);
 		add(testMoveBtn);
 
 		outputQBtn = new JButton("Q値出力");
 		outputQBtn.addActionListener(als);
-		outputQBtn.setBounds(190, SIZEPNY + 40, 120, 30);
+		outputQBtn.setBounds(190, sizePnY + 40, 120, 30);
 		add(outputQBtn);
 
 		learnLb = new JLabel("回数：");
-		learnLb.setBounds(200, SIZEPNY + 10, 50, 30);
+		learnLb.setBounds(200, sizePnY + 10, 50, 30);
 		add(learnLb);
 
 		learnFld = new JTextField("1000");
-		learnFld.setBounds(250, SIZEPNY + 10, 60, 30);
+		learnFld.setBounds(250, sizePnY + 10, 60, 30);
 		add(learnFld);
 
 		modeCheck = new JCheckBox("最短まで学習");
-		modeCheck.setBounds(320, SIZEPNY + 10, 120, 30);
+		modeCheck.setBounds(320, sizePnY + 10, 120, 30);
 		add(modeCheck);
 
 
@@ -149,10 +157,10 @@ public class MazeQGUI extends JFrame{
 			//線の描画
 			g.setColor(Color.black);
 			for(int i=1; i<mdata.maze.length; i++){
-				g.drawLine(0, SIZECELL*i, SIZECELL*COLUMNS, SIZECELL*i);
+				g.drawLine(0, SIZECELL*i, SIZECELL*columns, SIZECELL*i);
 			}
 			for(int j=1; j<mdata.maze[0].length; j++){
-				g.drawLine(SIZECELL*j, 0, SIZECELL*j, SIZECELL*ROWS);
+				g.drawLine(SIZECELL*j, 0, SIZECELL*j, SIZECELL*rows);
 			}
 
 			//ステップ数の描画
@@ -161,7 +169,7 @@ public class MazeQGUI extends JFrame{
 			g.drawString(step + "ステップ", 10, 20);
 
 			//学習回数の描画
-			g.drawString("学習回数：" + learningSum, SIZEPNX/2, 20);
+			g.drawString("学習回数：" + learningSum, sizePnX/2, 20);
 		}
 	}
 

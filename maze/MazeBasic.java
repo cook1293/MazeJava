@@ -13,11 +13,11 @@ import java.io.IOException;
 public class MazeBasic {
 
 
-	public final int ROWS = 10;
-	public final int COLUMNS = 16;
+	public int rows = 10;
+	public int columns = 16;
 
-	public int[][] mazeBasic = new int[ROWS][COLUMNS];
-	public int[][] maze = new int[ROWS][COLUMNS];
+	public int[][] mazeBasic = new int[rows][columns];
+	public int[][] maze = new int[rows][columns];
 	/*
 	 * 0:通路
 	 * 1:壁

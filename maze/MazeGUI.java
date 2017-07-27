@@ -19,12 +19,12 @@ import javax.swing.Timer;
 public class MazeGUI extends JFrame{
 
 	public static final int SIZECELL = 30;
-	public static final int ROWS = 10;
-	public static final int COLUMNS = 16;
-	public static final int SIZEPNX = SIZECELL * COLUMNS;
-	public static final int SIZEPNY = SIZECELL * ROWS;
-	public static int SIZEWINX = SIZEPNX + 30;
-	public static final int SIZEWINY = SIZEPNY + 130;
+	public static int rows;
+	public static int columns;
+	public static int sizePnX;
+	public static int sizePnY;
+	public static int sizeWinX;
+	public static int sizeWinY;
 
 	//GUI部品
 	MazePanel pn = new MazePanel();
@@ -44,18 +44,26 @@ public class MazeGUI extends JFrame{
 
 	//コンストラクタ
 	public MazeGUI(String title, MazeBasic mdata, int callTime){
+
+		rows = mdata.rows;
+		columns = mdata.columns;
+		sizePnX = SIZECELL * columns;
+		sizePnY = SIZECELL * rows;
+		sizeWinX = sizePnX + 30;
+		sizeWinY = sizePnY + 130;
+
 		//ウィンドウサイズの調整
-		if(SIZEWINX < 500){
-			SIZEWINX = 500;
+		if(sizeWinX < 500){
+			sizeWinX = 500;
 		}
 
 		//フレームの準備
-		setSize(SIZEWINX, SIZEWINY);
+		setSize(sizeWinX, sizeWinY);
 		setTitle(title);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		setLayout(null);
-		pn.setBounds(0, 0, SIZEPNX, SIZEPNY);
+		pn.setBounds(0, 0, sizePnX, sizePnY);
 		add(pn);
 
 		MyActionListener als = new MyActionListener();
@@ -63,28 +71,28 @@ public class MazeGUI extends JFrame{
 		//ボタン
 		resetBtn = new JButton("リセット");
 		resetBtn.addActionListener(als);
-		resetBtn.setBounds(10, SIZEPNY + 10, 90, 30);
+		resetBtn.setBounds(10, sizePnY + 10, 90, 30);
 		add(resetBtn);
 
 		stopBtn = new JButton("一時停止");
 		stopBtn.addActionListener(als);
-		stopBtn.setBounds(100, SIZEPNY + 10, 90, 30);
+		stopBtn.setBounds(100, sizePnY + 10, 90, 30);
 		add(stopBtn);
 		stopBtn.setEnabled(false);
 
 		depthBtn = new JButton("深さ優先");
 		depthBtn.addActionListener(als);
-		depthBtn.setBounds(190, SIZEPNY + 10, 90, 30);
+		depthBtn.setBounds(190, sizePnY + 10, 90, 30);
 		add(depthBtn);
 
 		breadthBtn = new JButton("幅優先");
 		breadthBtn.addActionListener(als);
-		breadthBtn.setBounds(280, SIZEPNY + 10, 90, 30);
+		breadthBtn.setBounds(280, sizePnY + 10, 90, 30);
 		add(breadthBtn);
 
 		randomBtn = new JButton("ランダム");
 		randomBtn.addActionListener(als);
-		randomBtn.setBounds(370, SIZEPNY + 10, 90, 30);
+		randomBtn.setBounds(370, sizePnY + 10, 90, 30);
 		add(randomBtn);
 
 		//迷路データ
@@ -123,10 +131,10 @@ public class MazeGUI extends JFrame{
 			//線の描画
 			g.setColor(Color.black);
 			for(int i=1; i<mdata.maze.length; i++){
-				g.drawLine(0, SIZECELL*i, SIZECELL*COLUMNS, SIZECELL*i);
+				g.drawLine(0, SIZECELL*i, SIZECELL*columns, SIZECELL*i);
 			}
 			for(int j=1; j<mdata.maze[0].length; j++){
-				g.drawLine(SIZECELL*j, 0, SIZECELL*j, SIZECELL*ROWS);
+				g.drawLine(SIZECELL*j, 0, SIZECELL*j, SIZECELL*rows);
 			}
 
 			//ステップ数の描画
@@ -135,11 +143,11 @@ public class MazeGUI extends JFrame{
 			g.drawString(step + "ステップ", 10, 20);
 
 			//探索名の描画
-			g.drawString(searchName, SIZEPNX/3 * 2, 20);
+			g.drawString(searchName, sizePnX/3 * 2, 20);
 
 			//最短ステップの描画
 			if(fastestStep != -1){
-				g.drawString("最短：" + fastestStep, SIZEPNX/3, 20);
+				g.drawString("最短：" + fastestStep, sizePnX/3, 20);
 			}
 
 		}

@@ -31,8 +31,8 @@ public class MazeBreadth {
 		this.mdata = mdata;
 		nowX = mdata.startX;
 		nowY = mdata.startY;
-		historyX = new int[mdata.ROWS][mdata.COLUMNS];
-		historyY = new int[mdata.ROWS][mdata.COLUMNS];
+		historyX = new int[mdata.rows][mdata.columns];
+		historyY = new int[mdata.rows][mdata.columns];
 	}
 
 	//キューにスタート位置を入れる
@@ -53,8 +53,14 @@ public class MazeBreadth {
 			return true;
 		}
 
+		//取り出した現在位置が既に探索済みならば探索しない
+		if(mdata.maze[nowY][nowX] == 4){
+			return false;
+		}
+
 		//現在位置を探索済みに
 		mdata.maze[nowY][nowX] = 4;
+
 
 		//進行可能方向を判断する処理。進行可能な方向は、全てキューに登録する
 		for(int i=0; i<moveX.length; i++){

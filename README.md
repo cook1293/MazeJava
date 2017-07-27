@@ -15,6 +15,7 @@ Eclipse 4.6 (Neon)，Java
 |2.1|2017/07/15|ボタンの不具合を修正。|
 |3.0|2017/07/27|Q学習で2つの探索モードを実装。|
 |3.1|2017/07/27|ウィンドウサイズ等の調整。|
+|3.2|2017/07/27|幅優先探索の改良とリファクタリング。|
 
 ## ファイル構成
 #### ソースファイル
@@ -52,11 +53,11 @@ mazeQlearningフォルダ内
 File f = new File("./src/maze/initialMaze.csv");
 ```
 
-迷路の大きさを変更した場合は、**MazeBasic.java**、**MazeGUI.java**（MazeQMain実行時は**MazeQGUI.java**）の定数宣言部分も変更する。
+迷路の大きさを変更した場合は、**MazeBasic.java**の変数宣言部分も変更する。
 
 ``` java
-public final int ROWS = 10;
-public final int COLUMNS = 16;
+public final int rows = 10;
+public final int columns = 16;
 ```
 
 MazeQMainで最短ステップモードを実行する場合は、**MazeBasic.java**の最短ステップ数も変更する。最短ステップ数は、ゴールまでの最短経路を通った時にかかるステップ数のこと。計算しなくても、上記MainMazeの幅優先探索を実行することで求められる。
