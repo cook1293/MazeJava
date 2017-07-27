@@ -28,7 +28,7 @@ public class MazeQGUI extends JFrame{
 	public static final int COLUMNS = 16;
 	public static final int SIZEPNX = SIZECELL * COLUMNS;
 	public static final int SIZEPNY = SIZECELL * ROWS;
-	public static final int SIZEWINX = SIZEPNX + 30;
+	public static int SIZEWINX = SIZEPNX + 30;
 	public static final int SIZEWINY = SIZEPNY + 130;
 
 	//GUI部品
@@ -54,6 +54,11 @@ public class MazeQGUI extends JFrame{
 
 	//コンストラクタ
 	public MazeQGUI(String title, MazeBasic mdata, int callTime){
+		//ウィンドウサイズの調整
+		if(SIZEWINX < 500){
+			SIZEWINX = 500;
+		}
+
 		//フレームの準備
 		setSize(SIZEWINX, SIZEWINY);
 		setTitle(title);
@@ -108,7 +113,7 @@ public class MazeQGUI extends JFrame{
 		//迷路データ
 		this.mdata = mdata;
 
-		//Q学習 (迷路データ, 学習回数, 割引率, 学習率, ε)
+		//Q学習 (迷路データ, 割引率, 学習率, ε)
 		mq = new MazeQlearning(mdata, 0.8, 0.2, 0.3);
 
 		sa = new SearchAction();
