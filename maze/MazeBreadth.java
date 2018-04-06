@@ -6,7 +6,7 @@ import java.util.Queue;
 
 /**
  * 幅優先探索
- * @author proglight
+ * @author cook1293
  */
 
 public class MazeBreadth {

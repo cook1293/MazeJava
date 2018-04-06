@@ -4,7 +4,7 @@ import java.util.Stack;
 
 /**
  * 深さ優先探索
- * @author proglight
+ * @author cook1293
  */
 
 public class MazeDepth {

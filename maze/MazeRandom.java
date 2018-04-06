@@ -5,7 +5,7 @@ import java.util.Random;
 
 /**
  * ランダム探索
- * @author proglight
+ * @author cook1293
  */
 
 public class MazeRandom {

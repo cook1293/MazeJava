@@ -4,7 +4,7 @@ import maze.MazeBasic;
 
 /**
  * Q学習による迷路実行のメインクラス
- * @author proglight
+ * @author cook1293
  */
 
 

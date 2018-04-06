@@ -13,7 +13,7 @@ import javax.swing.Timer;
 
 /**
  * 迷路の画面処理
- * @author proglight
+ * @author cook1293
  */
 
 public class MazeGUI extends JFrame{

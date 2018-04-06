@@ -6,7 +6,7 @@ import maze.MazeBasic;
 
 /**
  * Q学習で迷路を解く
- * @author proglight
+ * @author cook1293
  */
 
 public class MazeQlearning {
@@ -48,7 +48,7 @@ public class MazeQlearning {
 	MazeQlearning(MazeBasic mdata, double gr, double lr, double er){
 		this.mdata = mdata;
 
-		q = new double[mdata.ROWS][mdata.COLUMNS][4];
+		q = new double[mdata.rows][mdata.columns][4];
 		this.gammaRate = gr;
 		this.learningRate = lr;
 		this.epsilonRate = er;

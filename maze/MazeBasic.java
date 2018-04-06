@@ -7,7 +7,7 @@ import java.io.IOException;
 
 /**
  * 迷路の基本データ
- * @author proglight
+ * @author cook1293
  */
 
 public class MazeBasic {

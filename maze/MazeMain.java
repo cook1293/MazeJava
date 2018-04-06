@@ -2,7 +2,7 @@ package maze;
 
 /**
  * 迷路実行のメインクラス
- * @author proglight
+ * @author cook1293
  */
 
 public class MazeMain {

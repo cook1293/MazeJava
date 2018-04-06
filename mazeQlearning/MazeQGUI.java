@@ -19,7 +19,7 @@ import maze.MazeBasic;
 
 /**
  * Q学習による迷路の画面処理
- * @author proglight
+ * @author cook1293
  */
 
 public class MazeQGUI extends JFrame{
